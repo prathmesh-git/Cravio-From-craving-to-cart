@@ -18,8 +18,13 @@ const restaurantSchema = new mongoose.Schema(
         cuisineType: {
             type: String
         },
-        imageUrl: {
-            type: String
+        image: {
+            url: {
+                type: String
+            },
+            publicId: {
+                type: String
+            }
         },
         location: {
             addressLine: String,

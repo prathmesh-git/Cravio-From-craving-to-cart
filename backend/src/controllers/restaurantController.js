@@ -1,36 +1,51 @@
 const Restaurant = require("../models/Restaurant");
+const uploadToCloudinary = require("../services/cloudinaryUpload");
 
 // create restaurant (seller only)
 
 exports.createRestaurant = async (req, res) => {
-    try{
-        const{
-            name,
-            description,
-            cuisineType,
-            imageUrl,
-            location,
-            isTableBookingEnabled
-        } = req.body;
+  try {
+    const {
+      name,
+      description,
+      cuisineType,
+      location,
+      isTableBookingEnabled
+    } = req.body;
 
-        const restaurant = await Restaurant.create({
-            ownerId: req.user._id,
-            name,
-            description,
-            cuisineType,
-            imageUrl,
-            location,
-            isTableBookingEnabled
-        });
-        res.status(201).json({
-            message: "Restaurant created successfully",
-            restaurant
-        });
+    let image = null;
 
-    } catch (error) {
-        res.status(500).json({message: "Server error "});
+    if (req.file) {
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        "restaurants"
+      );
 
+      image = {
+        url: uploaded.secure_url,
+        publicId: uploaded.public_id
+      };
     }
+
+    const restaurant = await Restaurant.create({
+      ownerId: req.user._id,
+      name,
+      description,
+      cuisineType,
+      image,
+      location,
+      isTableBookingEnabled
+    });
+
+    res.status(201).json({
+      message: "Restaurant created successfully",
+      restaurant
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 // Get all restaurants (public)
