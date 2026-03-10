@@ -4,6 +4,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const dishRoutes = require("./routes/dishRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
 const { protect } = require("./middleware/authMiddleware");
 
 
@@ -15,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/dishes", dishRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
     res.send("Cravio API running");

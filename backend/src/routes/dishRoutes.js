@@ -9,9 +9,15 @@ const {
   toggleDishAvailability
 } = require("../controllers/dishController");
 
+const { getAllDishes } = require("../controllers/dishController");
+const { searchDishes } = require("../controllers/dishController");
+
 const { protect, authorizeSeller } = require("../middleware/authMiddleware");
 
+
 // Public
+router.get("/", getAllDishes);
+router.get("/search", searchDishes);
 router.get("/restaurant/:restaurantId", getDishesByRestaurant);
 
 // Seller only
